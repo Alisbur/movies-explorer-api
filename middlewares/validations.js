@@ -11,65 +11,44 @@ const validateSignIn = celebrate({
 const validateSignUp = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
-    avatar: Joi.string().regex(REGEXP_URL),
     email: Joi.string().required().regex(REGEXP_EMAIL),
     password: Joi.string().required(),
-  }),
-});
-
-const validateGetUserData = celebrate({
-  params: Joi.object().keys({
-    id: Joi.string().required().hex().length(24),
   }),
 });
 
 const validateUpdateMyProfile = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
+    email: Joi.string().regex(REGEXP_EMAIL),
   }),
 });
 
-const validateUpdateMyAvatar = celebrate({
+const validateDeleteMovie = celebrate({
+  params: Joi.object().keys({
+    movieId: Joi.number().required(),
+  }),
+});
+
+const validateAddMovie = celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().required().pattern(REGEXP_URL),
-  }),
-});
-
-const validateDeleteCard = celebrate({
-  params: Joi.object().keys({
-    cardId: Joi.string().required().hex().length(24),
-  }),
-});
-
-const validateAddCard = celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().required().min(2).max(30),
-    link: Joi.string().required().pattern(REGEXP_URL),
-  }),
-});
-
-const validateAddLike = celebrate({
-  params: Joi.object().keys({
-    cardId: Joi.string().required().hex().length(24),
-  }),
-});
-
-const validateDeleteLike = celebrate({
-  params: Joi.object().keys({
-    cardId: Joi.string().required().hex().length(24),
+    country: Joi.string().required(),
+    director: Joi.string().required(),
+    duration: Joi.number().required(),
+    year: Joi.string().required(),
+    description: Joi.string().required(),
+    image: Joi.string().required().regex(REGEXP_URL),
+    trailerLink: Joi.string().required().regex(REGEXP_URL),
+    thumbnail: Joi.string().required().regex(REGEXP_URL),
+    movieId: Joi.number().required(),
+    nameRU: Joi.string().required(),
+    nameEN: Joi.string().required(),
   }),
 });
 
 module.exports = {
   validateSignIn,
   validateSignUp,
-  validateGetUserData,
   validateUpdateMyProfile,
-  validateUpdateMyAvatar,
-  validateDeleteCard,
-  validateAddCard,
-  validateAddLike,
-  validateDeleteLike,
+  validateDeleteMovie,
+  validateAddMovie,
 };

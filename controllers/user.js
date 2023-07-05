@@ -18,42 +18,6 @@ const login = (req, res, next) => {
     .catch(next);
 };
 
-const getAllUsers = (req, res, next) => {
-  User.find({})
-    .then((data) => res.send({ data }))
-    .catch(next);
-};
-
-const getCurrentUser = (req, res, next) => {
-  User.findById(req.user._id)
-    .orFail(() => {
-      throw new NotFoundError('пользователь не найден');
-    })
-    .then((data) => res.send({ data }))
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new ValidationError('переданы некорректные данные пользователя'));
-      } else {
-        next(err);
-      }
-    });
-};
-
-const getUserById = (req, res, next) => {
-  User.findById(req.params.id)
-    .orFail(() => {
-      throw new NotFoundError('пользователь не найден');
-    })
-    .then((data) => res.send({ data }))
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new ValidationError('переданы некорректные данные пользователя'));
-      } else {
-        next(err);
-      }
-    });
-};
-
 const createUser = (req, res, next) => {
   bcrypt.hash(req.body.password, 10)
     .then((hash) => {
@@ -82,6 +46,21 @@ const createUser = (req, res, next) => {
     });
 };
 
+const getCurrentUser = (req, res, next) => {
+  User.findById(req.user._id)
+    .orFail(() => {
+      throw new NotFoundError('пользователь не найден');
+    })
+    .then((data) => res.send({ data }))
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new ValidationError('переданы некорректные данные пользователя'));
+      } else {
+        next(err);
+      }
+    });
+};
+
 const updateProfile = (req, res, next) => {
   User.findByIdAndUpdate(
     req.user._id,
@@ -104,28 +83,6 @@ const updateProfile = (req, res, next) => {
     });
 };
 
-const updateAvatar = (req, res, next) => {
-  User.findByIdAndUpdate(
-    req.user._id,
-    req.body,
-    {
-      new: true,
-      runValidators: true,
-    },
-  )
-    .orFail(() => {
-      throw new NotFoundError('пользователь не найден');
-    })
-    .then((data) => res.send({ data }))
-    .catch((err) => {
-      if (err.name === 'CastError' || err.name === 'ValidationError') {
-        next(new ValidationError('переданы некорректные данные пользователя'));
-      } else {
-        next(err);
-      }
-    });
-};
-
 module.exports = {
-  login, getAllUsers, getCurrentUser, getUserById, createUser, updateProfile, updateAvatar,
+  login, createUser, getCurrentUser, updateProfile,
 };

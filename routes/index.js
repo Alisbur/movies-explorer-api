@@ -10,7 +10,7 @@ router.post('/signup', validateSignUp, createUser);
 router.use(auth);
 
 router.use('/users', require('./users'));
-router.use('/cards', require('./cards'));
+router.use('/movies', require('./movies'));
 
 router.use('/', (req, res, next) => next(new NotFoundError('Страница не найдена')));
 

@@ -1,42 +1,17 @@
-/* eslint-disable prefer-regex-literals */
-
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const validator = require('validator');
 const AuthError = require('../errors/auth-error');
 
-const userSchema = new mongoose.Schema({
+const { REGEXP_EMAIL } = require('../utils/regex');
 
-  name: {
-    type: String,
-    minlength: 2,
-    maxlength: 30,
-    default: 'Жак-Ив Кусто',
-  },
-  about: {
-    type: String,
-    minlength: 2,
-    maxlength: 30,
-    default: 'Исследователь',
-  },
-  avatar: {
-    type: String,
-    validate: {
-      validator(v) {
-        // eslint-disable-next-line no-useless-escape
-        return /^https?:\/\/(www\.)?[a-z0-9\-._~:/?#[\]@!$&'()*+,;=]+#?$/i.test(v);
-      },
-      message: 'Ошибка в адресе изображения аватара',
-    },
-    default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
-  },
+const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
     unique: true,
     validate: {
       validator(v) {
-        return validator.isEmail(v);
+        return REGEXP_EMAIL.test(v);
       },
       message: 'Ошибка в адресе электронной почты',
     },
@@ -46,11 +21,15 @@ const userSchema = new mongoose.Schema({
     required: true,
     select: false,
   },
+  name: {
+    type: String,
+    minlength: 2,
+    maxlength: 30,
+  },
 }, {
   versionKey: false,
 });
 
-// eslint-disable-next-line func-names
 userSchema.statics.findUserByCredentials = function (email, password) {
   return this.findOne({ email }).select('+password')
     .then((user) => {
