@@ -1,7 +1,9 @@
+const { DEFAULT_NOT_FOUND_ERROR_MESSAGE, DEFAULT_NOT_FOUND_ERROR_CODE } = require('../utils/error-messages');
+
 class NotFoundError extends Error {
-  constructor(message = 'запрошенный ресурс не найден') {
+  constructor(message = DEFAULT_NOT_FOUND_ERROR_MESSAGE) {
     super(message);
-    this.statusCode = 404;
+    this.statusCode = DEFAULT_NOT_FOUND_ERROR_CODE;
   }
 }
 

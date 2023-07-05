@@ -1,7 +1,9 @@
+const { DEFAULT_VALIDATION_ERROR_MESSAGE, DEFAULT_VALIDATION_ERROR_CODE } = require('../utils/error-messages');
+
 class ValidationError extends Error {
-  constructor(message = 'переданы некорректные данные') {
+  constructor(message = DEFAULT_VALIDATION_ERROR_MESSAGE) {
     super(message);
-    this.statusCode = 400;
+    this.statusCode = DEFAULT_VALIDATION_ERROR_CODE;
   }
 }
 

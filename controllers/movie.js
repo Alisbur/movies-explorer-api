@@ -2,9 +2,10 @@ const Movie = require('../models/movie');
 const ValidationError = require('../errors/validation-error');
 const NotFoundError = require('../errors/not-found-error');
 const ForbiddenError = require('../errors/forbidden-error');
+const ConflictError = require('../errors/conflict-error');
 
 const getAllMovies = (req, res, next) => {
-  Movie.find({})
+  Movie.find({ owner: req.user._id })
     .then((data) => res.send({ data }))
     .catch(next);
 };
@@ -38,8 +39,11 @@ const createMovie = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new ValidationError('переданы некорректные данные фильма'));
+      } else if (err.code === 11000) {
+        next(new ConflictError('Id фильма уже используется'));
+      } else {
+        next(err);
       }
-      next(err);
     });
 };
 

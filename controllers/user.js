@@ -77,6 +77,8 @@ const updateProfile = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
         next(new ValidationError('переданы некорректные данные пользователя'));
+      } else if (err.code === 11000) {
+        next(new ConflictError('адрес электронной почты уже используется'));
       } else {
         next(err);
       }
