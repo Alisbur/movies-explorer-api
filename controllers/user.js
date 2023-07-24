@@ -23,17 +23,15 @@ const createUser = (req, res, next) => {
     .then((hash) => {
       const userData = {
         name: req.body.name,
-        about: req.body.about,
-        avatar: req.body.avatar,
         email: req.body.email,
         password: hash,
       };
       return User.create(userData);
     })
     .then(({
-      name, about, avatar, email, _id,
+      name, email, _id,
     }) => res.status(201).send({
-      name, about, avatar, email, _id,
+      name, email, _id,
     }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
