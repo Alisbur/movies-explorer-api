@@ -3,7 +3,7 @@ const express = require('express');
 require('dotenv').config();
 
 const {
-  PORT = 3000,
+  PORT = 3001,
   NODE_ENV,
   PROD_DB_HOST,
   PROD_DB_PORT,
@@ -29,7 +29,7 @@ const app = express();
 
 app.use(cors());
 app.use(helmet());
-app.use(limiter);
+// app.use(limiter);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
